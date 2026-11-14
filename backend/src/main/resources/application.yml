@@ -26,15 +26,18 @@ spring:
     default-property-inclusion: non_null
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET:examiq-dev-secret-key-must-be-at-least-256-bits-long-for-hs256-algorithm}
+
+  
   access-token-expiry-ms: ${JWT_ACCESS_TOKEN_EXPIRY_MS:7200000}
   refresh-token-expiry-days: 7
 
 cors:
-  allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+ 
 
 logging:
   level:
