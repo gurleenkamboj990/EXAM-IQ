@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, String> {
@@ -27,4 +28,7 @@ public interface QuestionRepository extends JpaRepository<Question, String> {
     );
 
     List<Question> findAllByIdIn(List<String> ids);
+
+    Optional<Question> findFirstByText(String text);
+    boolean existsByText(String text);
 }

@@ -4,6 +4,8 @@ target/
 *.war
 *.ear
 .env
+.env.supabase
+.env*.local
 *.iml
 .idea/
 .vscode/
