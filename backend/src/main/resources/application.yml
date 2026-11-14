@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: examiq-backend
+  profiles:
+    default: dev
+  datasource:
+    url: jdbc:h2:mem:examiq;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:examiq-dev-secret-key-must-be-at-least-256-bits-long-for-hs256-algorithm}
+  access-token-expiry-ms: 900000
+  refresh-token-expiry-days: 7
+
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174}
+
+logging:
+  level:
+    com.examiq: DEBUG
+    org.springframework.security: INFO
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

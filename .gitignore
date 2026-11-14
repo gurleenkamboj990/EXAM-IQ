@@ -1,0 +1,11 @@
+node_modules/
+dist/
+target/
+.tools/
+data/
+*.log
+run-log.txt
+.env
+.env.local
+.env.supabase
+.vscode/

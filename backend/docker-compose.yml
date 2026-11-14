@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: examiq-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: examiq
+      POSTGRES_USER: examiq
+      POSTGRES_PASSWORD: examiq123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U examiq"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: examiq-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/examiq
+      SPRING_DATASOURCE_USERNAME: examiq
+      SPRING_DATASOURCE_PASSWORD: examiq123
+      JWT_SECRET: change-me-in-production-must-be-at-least-32-characters-long!
+      CORS_ORIGINS: http://localhost:5173,http://localhost:5174
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+
