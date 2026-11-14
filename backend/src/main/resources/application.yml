@@ -30,7 +30,7 @@ server:
 
 jwt:
   secret: ${JWT_SECRET:examiq-dev-secret-key-must-be-at-least-256-bits-long-for-hs256-algorithm}
-  access-token-expiry-ms: 900000
+  access-token-expiry-ms: ${JWT_ACCESS_TOKEN_EXPIRY_MS:7200000}
   refresh-token-expiry-days: 7
 
 cors:

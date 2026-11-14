@@ -77,7 +77,12 @@ public class SecurityConfig {
                     body.put("timestamp", LocalDateTime.now().toString());
                     body.put("status", 401);
                     body.put("error", "Unauthorized");
-                    body.put("message", authException.getMessage());
+                    String customMsg = (String) request.getAttribute("jwt_error_message");
+                    String msg = (customMsg != null && !customMsg.isBlank()) ? customMsg : authException.getMessage();
+                    if (msg == null || msg.isBlank()) {
+                        msg = "Full authentication is required to access this resource";
+                    }
+                    body.put("message", msg);
                     body.put("path", request.getRequestURI());
                     objectMapper.writeValue(response.getOutputStream(), body);
                 })

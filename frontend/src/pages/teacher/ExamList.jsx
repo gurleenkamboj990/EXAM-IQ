@@ -50,8 +50,8 @@ export const ExamList = () => {
     try {
       const data = await examApi.getAll({ search, status, subject });
       setExams(data || []);
-    } catch {
-      toast.error('Failed to load exam schedule');
+    } catch (err) {
+      toast.error(err.message || 'Failed to load exam schedule');
     } finally {
       setIsLoading(false);
     }

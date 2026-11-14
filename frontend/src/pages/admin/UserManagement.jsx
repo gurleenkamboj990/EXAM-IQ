@@ -74,8 +74,8 @@ export const UserManagement = () => {
       setUsers(res.data);
       setTotal(res.total);
       setTotalPages(res.totalPages);
-    } catch {
-      toast.error('Failed to load users');
+    } catch (err) {
+      toast.error(err.message || 'Failed to load users');
     } finally {
       setIsLoading(false);
     }

@@ -51,7 +51,7 @@ export const SubjectiveReview = () => {
         setScoreInputs(initialScores);
         setCommentInputs(initialComments);
       } catch (err) {
-        toast.error('Failed to load subjective submissions queue');
+        toast.error(err.message || 'Failed to load subjective submissions queue');
       } finally {
         setIsLoading(false);
       }

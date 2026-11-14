@@ -61,7 +61,7 @@ export const ExamAnalytics = () => {
         const data = await analyticsApi.getExamAnalytics(id);
         setAnalytics(data);
       } catch (err) {
-        toast.error('Failed to load examination analytics');
+        toast.error(err.message || 'Failed to load examination analytics');
       } finally {
         setIsLoading(false);
       }

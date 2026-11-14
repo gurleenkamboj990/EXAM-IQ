@@ -1,5 +1,8 @@
 package com.examiq.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,14 +33,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = extractToken(request);
-            if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-                String userId = jwtTokenProvider.getUserIdFromToken(token);
-                UserDetails userDetails = userDetailsService.loadUserById(userId);
-                if (userDetails != null) {
-                    UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+            if (StringUtils.hasText(token)) {
+                try {
+                    Claims claims = jwtTokenProvider.parseToken(token);
+                    String userId = claims.getSubject();
+                    UserDetails userDetails = userDetailsService.loadUserById(userId);
+                    if (userDetails != null && userDetails.isEnabled()) {
+                        UsernamePasswordAuthenticationToken auth =
+                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    } else {
+                        request.setAttribute("jwt_error_message", "User account not found or disabled");
+                    }
+                } catch (ExpiredJwtException e) {
+                    log.debug("Expired JWT token: {}", e.getMessage());
+                    request.setAttribute("jwt_error_message", "Token has expired");
+                } catch (JwtException | IllegalArgumentException e) {
+                    log.debug("Invalid JWT token: {}", e.getMessage());
+                    request.setAttribute("jwt_error_message", "Invalid token");
                 }
             }
         } catch (Exception e) {

@@ -50,7 +50,7 @@ export const AvailableExams = () => {
       setExams(examsList || []);
       setResults(resultsList || []);
     } catch (err) {
-      toast.error('Failed to load examinations');
+      toast.error(err.message || 'Failed to load examinations');
     } finally {
       setIsLoading(false);
     }

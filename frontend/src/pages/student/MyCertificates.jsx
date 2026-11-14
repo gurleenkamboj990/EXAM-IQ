@@ -25,8 +25,8 @@ export const MyCertificates = () => {
       try {
         const data = await getMyCertificates(user.id);
         setCerts(data);
-      } catch {
-        toast.error('Failed to load certificates');
+      } catch (err) {
+        toast.error(err.message || 'Failed to load certificates');
       } finally {
         setIsLoading(false);
       }

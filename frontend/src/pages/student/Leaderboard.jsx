@@ -56,7 +56,7 @@ export const Leaderboard = () => {
         });
         setLeaderboard(data || []);
       } catch (err) {
-        toast.error('Failed to load leaderboard');
+        toast.error(err.message || 'Failed to load leaderboard');
       } finally {
         setIsLoading(false);
       }

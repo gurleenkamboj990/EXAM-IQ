@@ -105,7 +105,7 @@ export const QuestionBank = () => {
       setTotal(response.total || 0);
       setTotalPages(response.totalPages || 1);
     } catch (err) {
-      toast.error('Failed to load questions.');
+      toast.error(err.message || 'Failed to load questions.');
     } finally {
       setIsLoading(false);
     }

@@ -48,7 +48,7 @@ export const MyResults = () => {
         });
         setResults(data || []);
       } catch (err) {
-        toast.error('Failed to load past exam results');
+        toast.error(err.message || 'Failed to load past exam results');
       } finally {
         setIsLoading(false);
       }

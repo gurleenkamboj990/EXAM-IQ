@@ -48,8 +48,8 @@ export const AllExams = () => {
       setExams(res.data);
       setTotal(res.total);
       setTotalPages(res.totalPages);
-    } catch {
-      toast.error('Failed to load exams');
+    } catch (err) {
+      toast.error(err.message || 'Failed to load exams');
     } finally {
       setIsLoading(false);
     }

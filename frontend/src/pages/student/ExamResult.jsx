@@ -80,7 +80,7 @@ export const ExamResult = () => {
           }
         }
       } catch (err) {
-        toast.error('Failed to load assessment result');
+        toast.error(err.message || 'Failed to load assessment result');
         navigate('/student/results');
       } finally {
         setIsLoading(false);

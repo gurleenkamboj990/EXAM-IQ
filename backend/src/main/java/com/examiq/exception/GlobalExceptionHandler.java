@@ -27,11 +27,15 @@ public class GlobalExceptionHandler {
                 .map(fe -> new ErrorResponse.FieldError(fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.toList());
 
+        String message = fieldErrors.isEmpty()
+                ? "Validation failed"
+                : fieldErrors.stream().map(ErrorResponse.FieldError::getMessage).collect(Collectors.joining(", "));
+
         ErrorResponse err = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error("Bad Request")
-                .message("Validation failed")
+                .message(message)
                 .path(request.getRequestURI())
                 .fieldErrors(fieldErrors)
                 .build();
@@ -71,6 +75,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex,
                                                              HttpServletRequest request) {
+        org.springframework.security.core.Authentication auth =
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth instanceof org.springframework.security.authentication.AnonymousAuthenticationToken) {
+            String jwtMsg = (String) request.getAttribute("jwt_error_message");
+            String msg = (jwtMsg != null && !jwtMsg.isBlank()) ? jwtMsg : "Full authentication is required to access this resource";
+            return buildError(HttpStatus.UNAUTHORIZED, msg, request);
+        }
         return buildError(HttpStatus.FORBIDDEN, "Access denied: insufficient permissions", request);
     }
 
