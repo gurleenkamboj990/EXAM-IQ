@@ -5,6 +5,11 @@
 ---
 
 ## 🚀 Overview
+## 🌐 Live Demo
+
+**Live Website:** https://examiq-zeta.vercel.app/
+
+Note: The backend may take up to a minute to wake up.
 
 **ExamIQ** is an enterprise-grade digital assessment platform designed for educational institutions, universities, and certification bodies. Built on a resilient **Spring Boot 3** backend and a reactive **React + Tailwind CSS** frontend, ExamIQ delivers secure, fair, and high-performance testing experiences with intelligent automated grading, real-time proctoring telemetry, and academic analytics.
 
